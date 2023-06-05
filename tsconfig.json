@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "lib": ["DOM", "ESNext"],
+    "module": "commonjs",
+    "strict": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "allowJs": false,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "rootDir": "src",
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

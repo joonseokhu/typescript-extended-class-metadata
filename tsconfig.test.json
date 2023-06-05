@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2019",
+    "lib": ["DOM", "ESNext"],
+    "module": "commonjs",
+    "strict": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "allowJs": false,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "rootDir": "test",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "plugins": [
+      { "transform": "./src/index.ts" }
+    ],
+    // "useDefineForClassFields": true,
+    "declaration": true
+  },
+  "include": ["test/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
