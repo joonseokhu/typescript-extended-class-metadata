@@ -1,96 +1,100 @@
+/* eslint-disable no-bitwise */
 import ts from 'typescript';
+import { JSDocMetadata } from './metadata.types';
 
 export const hasTypeFlag = <T extends ts.Type>(
   flags: ts.TypeFlags[],
-  ) => (
-  type: ts.Type,
-  strict = false,
-) => {
-  return flags.some(flag => {
-    return strict
-      ? (type.flags === flag)
-      : ((type.flags & flag) === flag);
-  });
-}
+) => (
+    type: ts.Type,
+    strict = false,
+  ) => flags.some((flag) => (strict
+    ? (type.flags === flag)
+    : ((type.flags & flag) === flag)));
+
 export const hasTypeSymbol = (symbolName: string) => (type: ts.Type) => {
   const symbol = type.getSymbol?.() ?? type.symbol ?? undefined;
   return symbol?.name === symbolName;
-}
-export const getTypeArguments = (type: ts.Type): ts.Type[] => {
-  return (type as any)?.typeArguments ?? [];
-}
+};
+
+export const getTypeArguments = (type: ts.Type): ts.Type[] => (type as any)?.typeArguments ?? [];
+
 export const getTypeArgument = (
-  type: ts.Type
+  type: ts.Type,
 ): ts.Type | undefined => {
   const args = getTypeArguments(type);
   return args.length === 1 ? args[0] : undefined;
-}
+};
+
 export type TypeParser<T = ts.Type> = (type: ts.Type) => [true, T] | [false, undefined];
 
 export const useTypeParser = <T = ts.Type>(
-  parser: (inputType: ts.Type) => T | false
-): TypeParser<T> => {
-  return (type: ts.Type): [true, T]|[false, undefined] => {
+  parser: (inputType: ts.Type) => T | false,
+): TypeParser<T> => (type: ts.Type): [true, T] | [false, undefined] => {
     const parsed = parser(type);
     return parsed
       ? [true, parsed]
-      : [false, undefined]; 
-  }
-}
+      : [false, undefined];
+  };
 
 export const isUnionType = hasTypeFlag<ts.UnionType>([
   ts.TypeFlags.Union,
 ]);
+
 export const isIntersectionType = hasTypeFlag<ts.IntersectionType>([
   ts.TypeFlags.Intersection,
 ]);
+
 export const isObjectType = hasTypeFlag<ts.ObjectType>([
   ts.TypeFlags.Object,
 ]);
+
 export const isUndefinedType = hasTypeFlag([
   ts.TypeFlags.Undefined,
 ]);
+
 export const isNullType = hasTypeFlag([
   ts.TypeFlags.Null,
 ]);
+
 export const isBooleanType = hasTypeFlag([
   ts.TypeFlags.Boolean,
   ts.TypeFlags.BooleanLike,
   ts.TypeFlags.BooleanLiteral,
 ]);
+
 export const isNumberType = hasTypeFlag<ts.NumberLiteralType>([
   ts.TypeFlags.Number,
   ts.TypeFlags.NumberLike,
   ts.TypeFlags.NumberLiteral,
 ]);
+
 export const isStringType = hasTypeFlag<ts.StringLiteralType>([
   ts.TypeFlags.String,
   ts.TypeFlags.StringLike,
   ts.TypeFlags.StringLiteral,
 ]);
+
 export const isEnumType = hasTypeFlag<ts.EnumType>([
   ts.TypeFlags.Enum,
   ts.TypeFlags.EnumLike,
   ts.TypeFlags.EnumLiteral,
 ]);
 
-export const parseUnion = useTypeParser((type) => {
-  return isUnionType(type, true)
-    ? (type as ts.UnionType).types
-    : false;
-});
+export const parseUnion = useTypeParser((type) => (isUnionType(type, true)
+  ? (type as ts.UnionType).types
+  : false));
 
 export const parseOptionalType = useTypeParser((type) => {
-  const [isUnionType, unionTypes] = parseUnion(type);
-  if (!isUnionType) return false;
-  if (!unionTypes.some(t => isUndefinedType(t))) return false;
-  const restTypes = unionTypes.filter(t => !isUndefinedType(t));
+  const [isUnion, unionTypes] = parseUnion(type);
+  if (!isUnion) return false;
+  if (!unionTypes.some((t) => isUndefinedType(t))) return false;
+  const restTypes = unionTypes.filter((t) => !isUndefinedType(t));
 
   if (restTypes.length === 0) return false;
 
   if (restTypes.length === 1) return restTypes[0];
 
-  if (restTypes.every(t => isBooleanType(t))) {
+  if (restTypes.every((t) => isBooleanType(t))) {
     return {
       ...type,
       types: restTypes,
@@ -98,18 +102,14 @@ export const parseOptionalType = useTypeParser((type) => {
     };
   }
 
-  if (restTypes.every(t => isEnumType(t))) {
-    const members = restTypes.map((type) => {
-      return type.symbol?.declarations?.[0] as ts.EnumMember;
-    });
+  if (restTypes.every((t) => isEnumType(t))) {
+    const members = restTypes.map((t2) => t2.symbol?.declarations?.[0] as ts.EnumMember);
 
     const parentNode = members
       .map((member) => member.parent)
-      .reduce((acc: any, parent) => {
-        return acc.name.getText() === parent.name.getText()
-          ? acc
-          : undefined
-      })
+      .reduce((acc: any, parent) => (acc.name.getText() === parent.name.getText()
+        ? acc
+        : undefined));
 
     if (!parentNode) {
       return { ...type, types: restTypes };
@@ -166,3 +166,31 @@ export const parseClass = useTypeParser((type: ts.Type) => {
 
   return classType;
 });
+
+export const parseJSDoc = (node: ts.Node): JSDocMetadata => {
+  const jsDoc = node
+    .getChildren()
+    .find((child): child is ts.JSDoc => ts.isJSDoc(child));
+  if (!jsDoc) return { comment: '', isDeprecated: false, tags: [] };
+
+  const comment = String(jsDoc.comment ?? '');
+  const isDeprecated = !!ts.getJSDocDeprecatedTag(jsDoc);
+  const tags = ts
+    .getAllJSDocTags(jsDoc, (tag): tag is ts.JSDocTag => !!tag)
+    .map((tag) => {
+      const content = (() => {
+        if (!tag.comment) return '';
+        if (typeof tag.comment === 'string') return tag.comment;
+        return tag.comment.map((e) => e.getText().trim()).join('\n');
+      })();
+      return {
+        name: tag.tagName.getText(),
+        comment: content.trim(),
+      };
+    });
+  return {
+    comment,
+    isDeprecated,
+    tags,
+  };
+};

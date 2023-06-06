@@ -9,14 +9,11 @@
     "allowJs": false,
     "skipLibCheck": true,
     "noImplicitAny": true,
+    "declaration": true,
     "strictPropertyInitialization": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "outDir": "dist",
-    "rootDir": "src",
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
 }

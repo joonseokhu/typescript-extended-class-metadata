@@ -1,5 +1,6 @@
+/* eslint-disable arrow-body-style */
 import ts from 'typescript';
-import { createClassVisitor } from './transformer.class-visitor';
+import { ClassVisitor } from './transformer.class-visitor';
 
 export const transformerProgram = (program: ts.Program, config?: any): ts.TransformerFactory<any> => {
   return (context: ts.TransformationContext): ts.Transformer<any> => {
@@ -8,9 +9,15 @@ export const transformerProgram = (program: ts.Program, config?: any): ts.Transf
         if (!node) return ts.visitEachChild(node, visitor, context);
         if (!node.parent) return ts.visitEachChild(node, visitor, context);
 
-        return createClassVisitor(program, context, sourceFile)(node);
-      }
+        const classVisitor = new ClassVisitor(
+          program,
+          context,
+          sourceFile,
+        );
+
+        return classVisitor.visit(node);
+      };
       return ts.visitNode(sourceFile, visitor);
-    }
-  }
+    };
+  };
 };
