@@ -1,11 +1,16 @@
 import ts from 'typescript';
 
 export const hasTypeFlag = <T extends ts.Type>(
-  flags: ts.TypeFlags[]
-) => (
-  type: ts.Type
+  flags: ts.TypeFlags[],
+  ) => (
+  type: ts.Type,
+  strict = false,
 ) => {
-  return flags.some(flag => (type.flags & flag) === flag);
+  return flags.some(flag => {
+    return strict
+      ? (type.flags === flag)
+      : ((type.flags & flag) === flag);
+  });
 }
 export const hasTypeSymbol = (symbolName: string) => (type: ts.Type) => {
   const symbol = type.getSymbol?.() ?? type.symbol ?? undefined;
@@ -70,30 +75,30 @@ export const isEnumType = hasTypeFlag<ts.EnumType>([
 ]);
 
 export const parseUnion = useTypeParser((type) => {
-  return isUnionType(type) ? (type as ts.UnionType).types : false;
+  return isUnionType(type, true)
+    ? (type as ts.UnionType).types
+    : false;
 });
 
 export const parseOptionalType = useTypeParser((type) => {
   const [isUnionType, unionTypes] = parseUnion(type);
   if (!isUnionType) return false;
-  if (!unionTypes.some(isUndefinedType)) return false;
-  const restTypes = unionTypes.filter(e => !isUndefinedType(e));
-  
-  console.log('[OPTIONAL]', type.flags, ts.TypeFlags[type.flags])
+  if (!unionTypes.some(t => isUndefinedType(t))) return false;
+  const restTypes = unionTypes.filter(t => !isUndefinedType(t));
 
   if (restTypes.length === 0) return false;
 
   if (restTypes.length === 1) return restTypes[0];
 
-  if (restTypes.every(isBooleanType)) {
+  if (restTypes.every(t => isBooleanType(t))) {
     return {
       ...type,
       types: restTypes,
-      flags: ts.TypeFlags.Boolean
+      flags: ts.TypeFlags.Boolean | ts.TypeFlags.Union,
     };
   }
 
-  if (restTypes.every(isEnumType)) {
+  if (restTypes.every(t => isEnumType(t))) {
     const members = restTypes.map((type) => {
       return type.symbol?.declarations?.[0] as ts.EnumMember;
     });
@@ -139,8 +144,6 @@ export const parsePromise = useTypeParser((type) => {
 // ts.EnumDeclaration, ts.EnumMember[]
 export const parseEnum = useTypeParser((type) => {
   if (!isEnumType(type)) return false;
-
-  console.log('enum 은 enum 이긴 함')
 
   // get enum type
   const enumType = type.symbol?.declarations?.[0] as ts.EnumDeclaration;

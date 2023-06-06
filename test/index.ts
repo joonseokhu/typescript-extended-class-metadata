@@ -5,17 +5,6 @@ enum MyEnum {
   b = 'my-b',
 }
 
-enum YourEnum {
-  a = 'my-a',
-  b = 'my-b',
-}
-
-const MyMeta = (value: string): ClassDecorator => {
-  return (target) => {
-    Reflect.defineMetadata('custom', value, target.prototype);
-  }
-}
-
 @Reflect.metadata('a', '1')
 @Reflect.metadata('a', '2')
 export class Foo {
@@ -38,18 +27,37 @@ export class Foo {
   myEnum2?: MyEnum;
   myEnums1: MyEnum[] = [MyEnum.a];
   myEnums2?: MyEnum[];
+
+  uniStr1: 'a' | 'b';
+  uniStr2?: 'a' | 'b';
+  uniStrs1: ('a' | 'b')[];
+  uniStrs2?: ('a' | 'b')[];
   
-  yourEnum1: YourEnum;
-  yourEnum2?: YourEnum;
+  uniNum1: 1 | 2;
+  uniNum2?: 1 | 2;
+  uniNums1: (1 | 2)[];
+  uniNums2?: (1 | 2)[];
+
+  obj1: {};
+  obj2?: {};
+  objs1: {}[];
+  objs2?: {}[];
+}
+
+export class Bar {
+  num1: number;
 }
 
 @Reflect.metadata('a', '1')
-export class Bar {
+export class Baz {
   foo1: Foo;
   foo2?: Foo;
   @Reflect.metadata('a', '1')
   foos1: Foo[] = [];
   foos2?: Foo[];
 
-  bar: {};
+  fooBar1: Foo | Bar;
+  fooBar2?: Foo | Bar;
+  fooBars1: (Foo | Bar)[];
+  fooBars2?: (Foo | Bar)[] = [];
 }

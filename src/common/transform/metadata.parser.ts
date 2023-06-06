@@ -58,6 +58,9 @@ export const parsePropertyDeclaration = (node: ts.PropertyDeclaration, type: ts.
   const [isArray, arrayItemType] = parse.parseArray(parsedType);
   if (isArray) parsedType = arrayItemType;
 
+  const [isUnion, unionTypes] = parse.parseUnion(parsedType);
+  console.log('isUnion', isUnion)
+
   const [isClass, classType] = parse.parseClass(parsedType);
   const [isEnum, enumType] = parse.parseEnum(parsedType);
 
@@ -67,12 +70,10 @@ export const parsePropertyDeclaration = (node: ts.PropertyDeclaration, type: ts.
     if (parse.isStringType(parsedType)) return 'String';
     if (parse.isNumberType(parsedType)) return 'Number';
     if (parse.isBooleanType(parsedType)) return 'Boolean';
-    // if (parsedType.symbol) return parsedType.symbol.name;
     return 'undefined';
   })();
 
   console.log('typeName', typeName)
-  console.log('-----------')
 
   return {
     name,

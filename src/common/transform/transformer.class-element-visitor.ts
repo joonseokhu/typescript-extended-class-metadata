@@ -1,10 +1,7 @@
 import ts from 'typescript';
 import { parsePropertyDeclaration } from './metadata.parser';
 import { serializePropertyMetadata } from './metadata.serializer';
-
-const MetaKey = {
-  prop: 'rich-meta:prop',
-} as const;
+import { MetaKey } from './transformer.constants';
 
 export const createClassElementVisitor = (
   metadata: any,

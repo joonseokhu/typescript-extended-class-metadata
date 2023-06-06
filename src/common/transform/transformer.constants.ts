@@ -1,4 +1,4 @@
-const createMeta = (key: string) => Symbol(`rich-type:${key}`);
+const createMeta = (key: string) => `rich-metadata/${key}`
 
 export const MetaKey = {
   props: createMeta('props'),
