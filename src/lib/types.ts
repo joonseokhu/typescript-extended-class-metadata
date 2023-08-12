@@ -1,10 +1,16 @@
+/* eslint-disable no-bitwise */
+export enum ValueTypeFlag {
+  Unknown = 0,
+  Optional = 1 << 0,
+  Promise = 1 << 1,
+  Array = 1 << 2,
+  Class = 1 << 3,
+  Enum = 1 << 4,
+}
+
 export interface ValueTypeMetadata {
   type: any;
-  isOptional: boolean;
-  isPromise: boolean;
-  isArray: boolean;
-  isClass: boolean;
-  isEnum: boolean;
+  flag: ValueTypeFlag;
   enum: Record<string, number | string> | undefined;
 }
 

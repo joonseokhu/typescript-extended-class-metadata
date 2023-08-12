@@ -1,8 +1,6 @@
 import ts from 'typescript';
-import { MetaNames, GetterNames } from '../common/constants';
-import { metadataSerializers } from './metadata.serializer';
-import { ClassElementMetadata } from './metadata.types';
-import { MetadataDecorator, CreateStaticGetter } from './transformer';
+import { GetterNames } from '../common/constants';
+import { CreateStaticGetter, MetadataDecorator } from './transformer';
 import { ClassElementVisitor } from './transformer.class-element-visitor';
 import { ClassTransformerMetadata } from './transformer.types';
 
@@ -23,12 +21,6 @@ export class ClassVisitor {
     this.metadataDecorator = new MetadataDecorator(program, context, sourceFile);
     this.elementVisitor = new ClassElementVisitor(program, context, sourceFile, this.metadata);
     this.createStaticGetter = new CreateStaticGetter(program, context, sourceFile);
-  }
-
-  createMemberNamesArray(items: ClassElementMetadata[]) {
-    return this.context.factory.createArrayLiteralExpression(
-      items.map((item) => this.context.factory.createStringLiteral(item.name)),
-    );
   }
 
   visit(node: ts.Node): ts.Node {
@@ -57,12 +49,12 @@ export class ClassVisitor {
         ...node.members,
         this.createStaticGetter.create(
           GetterNames.props,
-          this.metadata.properties.map((property) => property.name),
+          this.metadata.properties,
           isExtending,
         ),
         this.createStaticGetter.create(
           GetterNames.methods,
-          this.metadata.properties.map((property) => property.name),
+          this.metadata.methods,
           isExtending,
         ),
       ],

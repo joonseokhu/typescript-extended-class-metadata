@@ -1,9 +1,8 @@
 import ts from 'typescript';
-import { parseMethodDeeclaration, parsePropertyDeclaration } from './metadata.parser';
 import { MetaNames } from '../common/constants';
 import { ClassTransformerMetadata } from './transformer.types';
-import { metadataSerializers } from './metadata.serializer';
 import { MetadataDecorator } from './transformer';
+import { MethodMetadata, PropertyMetadata } from './metadata';
 
 export class ClassElementVisitor {
   public metadataDecorator: MetadataDecorator;
@@ -19,9 +18,9 @@ export class ClassElementVisitor {
 
   visitMethod(node: ts.MethodDeclaration) {
     const type = this.program.getTypeChecker().getTypeAtLocation(node);
-    const parsed = parseMethodDeeclaration(node, type);
+    const methodMetadata = new MethodMetadata(node, type);
 
-    this.metadata.methods.push(parsed);
+    this.metadata.methods.push(methodMetadata.name);
 
     return this.context.factory.updateMethodDeclaration(
       node,
@@ -30,7 +29,7 @@ export class ClassElementVisitor {
         ...ts.getDecorators(node) ?? [],
         this.metadataDecorator.create(
           MetaNames.method,
-          metadataSerializers.classMethod(parsed),
+          methodMetadata.serialize(),
         ),
       ],
       node.asteriskToken,
@@ -45,9 +44,9 @@ export class ClassElementVisitor {
 
   visitProperty(node: ts.PropertyDeclaration) {
     const type = this.program.getTypeChecker().getTypeAtLocation(node);
-    const parsed = parsePropertyDeclaration(node, type);
+    const propertyMetadata = new PropertyMetadata(node, type);
 
-    this.metadata.properties.push(parsed);
+    this.metadata.properties.push(propertyMetadata.name);
 
     return this.context.factory.updatePropertyDeclaration(
       node,
@@ -56,7 +55,7 @@ export class ClassElementVisitor {
         ...ts.getDecorators(node) ?? [],
         this.metadataDecorator.create(
           MetaNames.prop,
-          metadataSerializers.classProperty(parsed),
+          propertyMetadata.serialize(),
         ),
       ],
       node.name,

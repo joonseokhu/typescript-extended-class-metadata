@@ -1,6 +1,5 @@
 /* eslint-disable no-bitwise */
 import ts from 'typescript';
-import { JSDocMetadata } from './metadata.types';
 
 export const hasTypeFlag = <T extends ts.Type>(
   flags: ts.TypeFlags[],
@@ -166,31 +165,3 @@ export const parseClass = useTypeParser((type: ts.Type) => {
 
   return classType;
 });
-
-export const parseJSDoc = (node: ts.Node): JSDocMetadata => {
-  const jsDoc = node
-    .getChildren()
-    .find((child): child is ts.JSDoc => ts.isJSDoc(child));
-  if (!jsDoc) return { comment: '', isDeprecated: false, tags: [] };
-
-  const comment = String(jsDoc.comment ?? '');
-  const isDeprecated = !!ts.getJSDocDeprecatedTag(jsDoc);
-  const tags = ts
-    .getAllJSDocTags(jsDoc, (tag): tag is ts.JSDocTag => !!tag)
-    .map((tag) => {
-      const content = (() => {
-        if (!tag.comment) return '';
-        if (typeof tag.comment === 'string') return tag.comment;
-        return tag.comment.map((e) => e.getText().trim()).join('\n');
-      })();
-      return {
-        name: tag.tagName.getText(),
-        comment: content.trim(),
-      };
-    });
-  return {
-    comment,
-    isDeprecated,
-    tags,
-  };
-};
