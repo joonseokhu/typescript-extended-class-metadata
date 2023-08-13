@@ -1,5 +1,6 @@
 /* eslint-disable no-bitwise */
 export enum ValueTypeFlag {
+  Unknown = 0,
   Optional = 1 << 0,
   Promise = 1 << 1,
   Array = 1 << 2,
