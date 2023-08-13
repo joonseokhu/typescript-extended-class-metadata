@@ -1,11 +1,11 @@
 {
-  "name": "typescript-plugin-extended-class-metadata",
+  "name": "typescript-extended-class-metadata",
   "version": "0.0.1",
   "description": "",
   "author": "Joonseok Hu",
   "repository": {
     "type": "git",
-    "url": "https://github.com/joonseokhu/typescript-plugin-extended-class-metadata.git"
+    "url": "https://github.com/joonseokhu/typescript-extended-class-metadata.git"
   },
   "keywords": [],
   "license": "MIT",
