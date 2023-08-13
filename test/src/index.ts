@@ -12,6 +12,7 @@ const UseRichMeta = (callback: UseRichMetaCallback): ClassDecorator => (target) 
   const propsNames = getPropertyNames(target);
   propsNames.forEach((propName) => {
     const metadata = getPropertyMetadata(target.prototype, propName);
+    if (!metadata) throw new Error('metadata is undefined');
     const applyDecorators = (...decorators: PropertyDecorator[]) => {
       decorators.forEach((decorator) => {
         decorator(target.prototype, propName);
@@ -22,11 +23,11 @@ const UseRichMeta = (callback: UseRichMetaCallback): ClassDecorator => (target) 
 };
 
 const IsNumber = (): PropertyDecorator => (target, propertyKey) => {
-  console.log('@IsNumber', propertyKey, getPropertyMetadata(target, propertyKey));
+  // console.log('@IsNumber', propertyKey, getPropertyMetadata(target, propertyKey));
 };
 
 const IsOptional = (): PropertyDecorator => (target, propertyKey) => {
-  console.log('@IsOptional', propertyKey);
+  // console.log('@IsOptional', propertyKey);
 };
 
 enum MyEnum {

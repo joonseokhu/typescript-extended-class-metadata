@@ -26,7 +26,6 @@ export class MemberMetadata<
   getProperties() {
     return {
       ...this.jsDoc.getProperties(),
-      name: serializeValue.asString(this.name),
     };
   }
 }

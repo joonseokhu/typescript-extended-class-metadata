@@ -1,5 +1,18 @@
+/* eslint-disable no-bitwise */
 import { MetaNames, GetterNames } from '../common/constants';
-import { ClassMethodMetadata, ClassPropertyMetadata } from './types';
+import {
+  ClassMethodMetadata, ClassPropertyMetadata, ValueType, ValueTypeFlag,
+} from './types';
+
+export const parseValueTypeFlag = (flag: ValueTypeFlag): ValueType => {
+  return {
+    isOptional: !!(flag & ValueTypeFlag.Optional),
+    isPromise: !!(flag & ValueTypeFlag.Promise),
+    isArray: !!(flag & ValueTypeFlag.Array),
+    isClass: !!(flag & ValueTypeFlag.Class),
+    isEnum: !!(flag & ValueTypeFlag.Enum),
+  };
+};
 
 /**
  * get metadata of property
@@ -10,7 +23,10 @@ import { ClassMethodMetadata, ClassPropertyMetadata } from './types';
 export const getPropertyMetadata = (
   target: object,
   propertyKey: string | symbol,
-): ClassPropertyMetadata => Reflect.getMetadata(MetaNames.prop, target, propertyKey);
+): ClassPropertyMetadata | undefined => {
+  const metadata = Reflect.getMetadata(MetaNames.prop, target, propertyKey);
+  return { ...metadata, ...parseValueTypeFlag(metadata.flag) };
+};
 
 /**
  * get metadata of method
@@ -21,7 +37,10 @@ export const getPropertyMetadata = (
 export const getMethodMetadata = (
   target: object,
   propertyKey: string | symbol,
-): ClassMethodMetadata => Reflect.getMetadata(MetaNames.method, target, propertyKey);
+): ClassMethodMetadata | undefined => {
+  const metadata = Reflect.getMetadata(MetaNames.method, target, propertyKey);
+  return { ...metadata, ...parseValueTypeFlag(metadata.flag) };
+};
 
 /**
  * get property names of class

@@ -1,6 +1,5 @@
 /* eslint-disable no-bitwise */
 export enum ValueTypeFlag {
-  Unknown = 0,
   Optional = 1 << 0,
   Promise = 1 << 1,
   Array = 1 << 2,
@@ -8,14 +7,20 @@ export enum ValueTypeFlag {
   Enum = 1 << 4,
 }
 
-export interface ValueTypeMetadata {
+export interface ValueType {
+  isOptional: boolean;
+  isPromise: boolean;
+  isArray: boolean;
+  isClass: boolean;
+  isEnum: boolean;
+}
+
+export interface ValueTypeMetadata extends ValueType {
   type: any;
-  flag: ValueTypeFlag;
   enum: Record<string, number | string> | undefined;
 }
 
 export interface ClassElementMetadata {
-  name: string;
   comment: string;
   isDeprecated: boolean;
   tags: { name: string, comment: string }[];
