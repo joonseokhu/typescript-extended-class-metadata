@@ -1,6 +1,6 @@
 {
   "name": "typescript-plugin-extended-class-metadata",
-  "version": "0.1.4",
+  "version": "0.0.1",
   "description": "",
   "author": "Joonseok Hu",
   "repository": {
@@ -9,16 +9,30 @@
   },
   "keywords": [],
   "license": "MIT",
-  "main": "./dist/lib/index.js",
-  "types": "./dist/lib/index.d.ts",
   "exports": {
     ".": {
+      "import": {
+        "types": "./dist/lib/index.d.ts",
+        "default": "./dist/lib/index.js"
+      },
       "require": {
         "types": "./dist/lib/index.d.ts",
         "default": "./dist/lib/index.js"
       }
+    },
+    "./plugin": {
+      "import": {
+        "types": "./dist/lib/plugin.d.ts",
+        "default": "./dist/lib/plugin.js"
+      },
+      "require": {
+        "types": "./dist/plugin/index.d.ts",
+        "default": "./dist/plugin/index.js"
+      }
     }
   },
+  "main": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
   "scripts": {
     "prebuild": "rimraf dist test/dist",
     "build": "npm run prebuild && tsc --project ./tsconfig.build.json",
