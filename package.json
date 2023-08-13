@@ -2,6 +2,13 @@
   "name": "typescript-plugin-extended-class-metadata",
   "version": "0.1.0",
   "description": "",
+  "author": "Joonseok Hu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joonseokhu/typescript-plugin-extended-class-metadata.git"
+  },
+  "keywords": [],
+  "license": "MIT",
   "main": "index.js",
   "exports": {
     ".": {
@@ -18,9 +25,6 @@
     "test": "npm run build && tspc --project ./tsconfig.test.json && node ./test/dist",
     "lint": "eslint ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
   "devDependencies": {
     "@nestjs/swagger": "^6.3.0",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
