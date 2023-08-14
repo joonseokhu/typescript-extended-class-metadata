@@ -1,12 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDirs": ["./test/src"],
+    "rootDir": "./test/src",
     "outDir": "./test/dist",
-    "plugins": [
-      { "transform": "./dist/plugin" }
-    ],
+    "plugins": [{ "transform": "./dist/plugin" }],
+    "types": ["mocha"]
   },
-  "include": ["test/src/**/*"],
-  "exclude": ["node_modules", "dist", "test/dist"]
+  "include": ["./test/src/**/*.ts"],
+  "exclude": ["./node_modules/", "./dist/", "./test/dist/"],
 }
