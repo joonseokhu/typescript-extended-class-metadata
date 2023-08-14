@@ -17,6 +17,7 @@ export interface ValueType {
 }
 
 export interface ValueTypeMetadata extends ValueType {
+  flag: number;
   type: any;
   enum: Record<string, number | string> | undefined;
 }

@@ -25,7 +25,8 @@ export const getPropertyMetadata = (
   propertyKey: string | symbol,
 ): ClassPropertyMetadata | undefined => {
   const metadata = Reflect.getMetadata(MetaNames.prop, target, propertyKey);
-  return { ...metadata, ...parseValueTypeFlag(metadata.flag) };
+  if (!metadata) return undefined;
+  return { ...metadata, ...parseValueTypeFlag(metadata?.flag ?? 0) };
 };
 
 /**
@@ -39,7 +40,8 @@ export const getMethodMetadata = (
   propertyKey: string | symbol,
 ): ClassMethodMetadata | undefined => {
   const metadata = Reflect.getMetadata(MetaNames.method, target, propertyKey);
-  return { ...metadata, ...parseValueTypeFlag(metadata.flag) };
+  if (!metadata) return undefined;
+  return { ...metadata, ...parseValueTypeFlag(metadata?.flag ?? 0) };
 };
 
 /**
