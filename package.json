@@ -38,7 +38,7 @@
     "build": "npm run prebuild && tsc --project ./tsconfig.build.json",
     "lint": "eslint .",
     "pretest": "npm run build && tspc --project ./tsconfig.test.json",
-    "test": "mocha ./test/dist/**/*.test.js"
+    "test": "mocha ./test/dist/**/*.spec.js"
   },
   "devDependencies": {
     "@types/chai": "^4.3.5",
