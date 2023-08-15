@@ -4,11 +4,14 @@ import * as Output from '../../lib/types';
 import { Metadata } from './metadata.abstract';
 import * as parse from '../parser';
 import { serializeValue } from '../serializer';
+import { ValueTypeName } from '../../common/constants';
 
 export class ValueTypeMetadata extends Metadata {
   private flag: Output.ValueTypeFlag = 0;
 
-  private typeName: string = 'undefined';
+  private typeName: ValueTypeName = ValueTypeName.Unknown;
+
+  private className: string = 'undefined';
 
   private enumName: string = 'undefined';
 
@@ -54,28 +57,32 @@ export class ValueTypeMetadata extends Metadata {
     const [isClass, classType] = parse.parseClass(this.type);
     if (!isClass) return;
     this.flag |= Output.ValueTypeFlag.Class;
-    this.typeName = classType.name?.getText() ?? 'Object';
+    this.typeName = ValueTypeName.Class;
+    this.className = classType.name?.getText() ?? 'Object';
   }
 
   private parseEnum() {
     const [isEnum, enumValue] = parse.parseEnum(this.type);
     if (!isEnum) return;
     this.flag |= Output.ValueTypeFlag.Enum;
-    this.typeName = 'String';
+    this.typeName = ValueTypeName.Enum;
     this.enumName = enumValue.name?.getText() ?? 'undefined';
   }
 
   private parsePrimitive() {
-    if (parse.isStringType(this.type)) this.typeName = 'String';
-    if (parse.isNumberType(this.type)) this.typeName = 'Number';
-    if (parse.isBooleanType(this.type)) this.typeName = 'Boolean';
+    if (parse.isStringType(this.type)) this.typeName = ValueTypeName.String;
+    if (parse.isNumberType(this.type)) this.typeName = ValueTypeName.Number;
+    if (parse.isBooleanType(this.type)) this.typeName = ValueTypeName.Boolean;
+    if (parse.isNullType(this.type)) this.typeName = ValueTypeName.Null;
+    if (parse.isUndefinedType(this.type)) this.typeName = ValueTypeName.Undefined;
   }
 
   getProperties() {
     return {
-      type: serializeValue.asIdentifier(this.typeName),
+      type: serializeValue.asString(this.typeName),
       flag: serializeValue.asNumber(this.flag),
       enum: serializeValue.asIdentifier(this.enumName),
+      class: serializeValue.asIdentifier(this.className),
     };
   }
 }

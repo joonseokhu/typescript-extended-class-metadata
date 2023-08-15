@@ -1,5 +1,5 @@
 /* eslint-disable no-bitwise */
-import { MetaNames, GetterNames } from '../common/constants';
+import { MetaName, GetterName } from '../common/constants';
 import {
   ClassMethodMetadata, ClassPropertyMetadata, ValueType, ValueTypeFlag,
 } from './types';
@@ -24,7 +24,7 @@ export const getPropertyMetadata = (
   target: object,
   propertyKey: string | symbol,
 ): ClassPropertyMetadata | undefined => {
-  const metadata = Reflect.getMetadata(MetaNames.prop, target, propertyKey);
+  const metadata = Reflect.getMetadata(MetaName.Prop, target, propertyKey);
   if (!metadata) return undefined;
   return { ...metadata, ...parseValueTypeFlag(metadata?.flag ?? 0) };
 };
@@ -39,7 +39,7 @@ export const getMethodMetadata = (
   target: object,
   propertyKey: string | symbol,
 ): ClassMethodMetadata | undefined => {
-  const metadata = Reflect.getMetadata(MetaNames.method, target, propertyKey);
+  const metadata = Reflect.getMetadata(MetaName.Method, target, propertyKey);
   if (!metadata) return undefined;
   return { ...metadata, ...parseValueTypeFlag(metadata?.flag ?? 0) };
 };
@@ -52,7 +52,7 @@ export const getMethodMetadata = (
  * @returns - property names of class
  */
 export const getPropertyNames = (target: object, own = false): string[] => {
-  return (target as any)[GetterNames.props]?.(own);
+  return (target as any)[GetterName.Props]?.(own);
 };
 
 /**
@@ -63,5 +63,5 @@ export const getPropertyNames = (target: object, own = false): string[] => {
  * @returns - method names of class
  */
 export const getMethodNames = (target: object, own = false): string[] => {
-  return (target as any)[GetterNames.methods]?.(own);
+  return (target as any)[GetterName.Methods]?.(own);
 };

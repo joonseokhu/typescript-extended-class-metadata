@@ -1,9 +1,20 @@
-export const MetaNames = {
-  prop: 'EXTENDED_METADATA:PROP',
-  method: 'EXTENDED_METADATA:METHOD',
-} as const;
+export enum MetaName {
+  Prop = 'EXTENDED_METADATA:PROP',
+  Method = 'EXTENDED_METADATA:METHOD',
+}
 
-export const GetterNames = {
-  props: '_EXTENDED_METADATA_PROPS',
-  methods: '_EXTENDED_METADATA_METHODS',
-} as const;
+export enum GetterName {
+  Props = '_EXTENDED_METADATA_PROPS',
+  Methods = '_EXTENDED_METADATA_METHODS',
+}
+
+export enum ValueTypeName {
+  Unknown = 'unknown',
+  Undefined = 'undefined',
+  Null = 'null',
+  String = 'string',
+  Number = 'number',
+  Boolean = 'boolean',
+  Class = 'class',
+  Enum = 'enum',
+}

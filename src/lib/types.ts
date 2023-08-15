@@ -18,7 +18,8 @@ export interface ValueType {
 
 export interface ValueTypeMetadata extends ValueType {
   flag: number;
-  type: any;
+  type: string;
+  class: Function;
   enum: Record<string, number | string> | undefined;
 }
 
@@ -31,7 +32,7 @@ export interface ClassElementMetadata {
 export interface ClassMethodMetadata extends ClassElementMetadata {
   isAsync: boolean;
   isStatic: boolean;
-  returnType: ValueTypeMetadata;
+  returnType: ValueTypeMetadata | undefined;
 }
 
 export interface ClassPropertyMetadata extends Omit<ValueTypeMetadata, 'isPromise'>, ClassElementMetadata {

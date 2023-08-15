@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { expect } from 'chai';
-import { getPropertyMetadata, getPropertyNames } from '../../../dist/lib';
+import { ValueTypeName, getPropertyMetadata, getPropertyNames } from '../../../dist/lib';
 import { NumberTest } from './number';
 
 describe('number', () => {
@@ -26,7 +26,7 @@ describe('number', () => {
   it('num1 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'num1');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(undefined);
@@ -35,7 +35,7 @@ describe('number', () => {
   it('num2 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'num2');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(1);
@@ -44,7 +44,7 @@ describe('number', () => {
   it('num3 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'num3');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(0);
@@ -53,7 +53,7 @@ describe('number', () => {
   it('num4 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'num4');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -62,7 +62,7 @@ describe('number', () => {
   it('num5 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'num5');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -71,7 +71,7 @@ describe('number', () => {
   it('num6 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'num6');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(1);
@@ -80,7 +80,7 @@ describe('number', () => {
   it('num7 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'num7');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(0);
@@ -89,7 +89,7 @@ describe('number', () => {
   it('nums1 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'nums1');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(undefined);
@@ -98,7 +98,7 @@ describe('number', () => {
   it('nums2 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'nums2');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.deep.equal([]);
@@ -107,7 +107,7 @@ describe('number', () => {
   it('nums3 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'nums3');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.deep.equal([1]);
@@ -116,7 +116,7 @@ describe('number', () => {
   it('nums4 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'nums4');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -125,7 +125,7 @@ describe('number', () => {
   it('nums5 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'nums5');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -134,7 +134,7 @@ describe('number', () => {
   it('nums6 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'nums6');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.deep.equal([]);
@@ -143,7 +143,7 @@ describe('number', () => {
   it('nums7 should have correct metadata', () => {
     const data = getPropertyMetadata(NumberTest.prototype, 'nums7');
 
-    expect(data?.type).to.equal(Number);
+    expect(data?.type).to.equal(ValueTypeName.Number);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.deep.equal([1]);

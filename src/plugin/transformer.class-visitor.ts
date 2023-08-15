@@ -1,5 +1,5 @@
 import ts from 'typescript';
-import { GetterNames } from '../common/constants';
+import { GetterName } from '../common/constants';
 import { CreateStaticGetter, MetadataDecorator } from './transformer';
 import { ClassElementVisitor } from './transformer.class-element-visitor';
 import { ClassTransformerMetadata } from './transformer.types';
@@ -48,12 +48,12 @@ export class ClassVisitor {
       [
         ...node.members,
         this.createStaticGetter.create(
-          GetterNames.props,
+          GetterName.Props,
           this.metadata.properties,
           isExtending,
         ),
         this.createStaticGetter.create(
-          GetterNames.methods,
+          GetterName.Methods,
           this.metadata.methods,
           isExtending,
         ),

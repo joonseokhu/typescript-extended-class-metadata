@@ -1,5 +1,5 @@
 import ts from 'typescript';
-import { MetaNames } from '../common/constants';
+import { MetaName } from '../common/constants';
 import { ClassTransformerMetadata } from './transformer.types';
 import { MetadataDecorator } from './transformer';
 import { MethodMetadata, PropertyMetadata } from './metadata';
@@ -28,7 +28,7 @@ export class ClassElementVisitor {
         ...ts.getModifiers(node) ?? [],
         ...ts.getDecorators(node) ?? [],
         this.metadataDecorator.create(
-          MetaNames.method,
+          MetaName.Method,
           methodMetadata.serialize(),
         ),
       ],
@@ -54,7 +54,7 @@ export class ClassElementVisitor {
         ...ts.getModifiers(node) ?? [],
         ...ts.getDecorators(node) ?? [],
         this.metadataDecorator.create(
-          MetaNames.prop,
+          MetaName.Prop,
           propertyMetadata.serialize(),
         ),
       ],
