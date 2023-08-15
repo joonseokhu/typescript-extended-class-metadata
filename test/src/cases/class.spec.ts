@@ -28,7 +28,7 @@ describe('class', () => {
   it('sub1 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'sub1');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
@@ -39,7 +39,7 @@ describe('class', () => {
   it('sub2 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'sub2');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
@@ -50,7 +50,7 @@ describe('class', () => {
   it('sub3 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'sub3');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
@@ -61,7 +61,7 @@ describe('class', () => {
   it('sub4 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'sub4');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
@@ -72,7 +72,7 @@ describe('class', () => {
   it('sub5 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'sub5');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
@@ -83,7 +83,7 @@ describe('class', () => {
   it('sub6 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'sub6');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
@@ -94,7 +94,7 @@ describe('class', () => {
   it('sub7 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'sub7');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
@@ -105,7 +105,7 @@ describe('class', () => {
   it('subs1 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'subs1');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
@@ -116,7 +116,7 @@ describe('class', () => {
   it('subs2 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'subs2');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
@@ -127,7 +127,7 @@ describe('class', () => {
   it('subs3 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'subs3');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
@@ -138,7 +138,7 @@ describe('class', () => {
   it('subs4 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'subs4');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
@@ -149,7 +149,7 @@ describe('class', () => {
   it('subs5 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'subs5');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
@@ -160,7 +160,7 @@ describe('class', () => {
   it('subs6 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'subs6');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
@@ -171,7 +171,7 @@ describe('class', () => {
   it('subs7 should have correct metadata', () => {
     const data = getPropertyMetadata(ClassTest.prototype, 'subs7');
 
-    expect(data?.type).to.equal(ValueTypeName.Class);
+    expect(data?.type).to.equal(ValueTypeName.Object);
     expect(data?.class).to.equal(Sub);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);

@@ -57,7 +57,7 @@ export class ValueTypeMetadata extends Metadata {
     const [isClass, classType] = parse.parseClass(this.type);
     if (!isClass) return;
     this.flag |= Output.ValueTypeFlag.Class;
-    this.typeName = ValueTypeName.Class;
+    this.typeName = ValueTypeName.Object;
     this.className = classType.name?.getText() ?? 'Object';
   }
 
@@ -65,7 +65,7 @@ export class ValueTypeMetadata extends Metadata {
     const [isEnum, enumValue] = parse.parseEnum(this.type);
     if (!isEnum) return;
     this.flag |= Output.ValueTypeFlag.Enum;
-    this.typeName = ValueTypeName.Enum;
+    this.typeName = ValueTypeName.String;
     this.enumName = enumValue.name?.getText() ?? 'undefined';
   }
 

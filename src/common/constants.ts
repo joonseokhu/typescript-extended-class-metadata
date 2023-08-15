@@ -12,9 +12,8 @@ export enum ValueTypeName {
   Unknown = 'unknown',
   Undefined = 'undefined',
   Null = 'null',
-  String = 'string',
-  Number = 'number',
   Boolean = 'boolean',
-  Class = 'class',
-  Enum = 'enum',
+  Number = 'number',
+  String = 'string',
+  Object = 'object',
 }

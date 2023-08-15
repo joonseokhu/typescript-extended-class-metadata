@@ -26,7 +26,7 @@ describe('enum', () => {
   it('myEnum1 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnum1');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(undefined);
@@ -37,7 +37,7 @@ describe('enum', () => {
   it('myEnum2 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnum2');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(MyEnum.a);
@@ -48,7 +48,7 @@ describe('enum', () => {
   it('myEnum3 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnum3');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(MyEnum.b);
@@ -59,7 +59,7 @@ describe('enum', () => {
   it('myEnum4 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnum4');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -70,7 +70,7 @@ describe('enum', () => {
   it('myEnum5 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnum5');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -81,7 +81,7 @@ describe('enum', () => {
   it('myEnum6 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnum6');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(MyEnum.a);
@@ -92,7 +92,7 @@ describe('enum', () => {
   it('myEnum7 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnum7');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(false);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(MyEnum.b);
@@ -103,7 +103,7 @@ describe('enum', () => {
   it('myEnums1 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnums1');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.equal(undefined);
@@ -114,7 +114,7 @@ describe('enum', () => {
   it('myEnums2 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnums2');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.deep.equal([]);
@@ -125,7 +125,7 @@ describe('enum', () => {
   it('myEnums3 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnums3');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(false);
     expect(data?.initializer).to.deep.equal([MyEnum.a]);
@@ -136,7 +136,7 @@ describe('enum', () => {
   it('myEnums4 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnums4');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -147,7 +147,7 @@ describe('enum', () => {
   it('myEnums5 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnums5');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.equal(undefined);
@@ -158,7 +158,7 @@ describe('enum', () => {
   it('myEnums6 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnums6');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.deep.equal([]);
@@ -169,7 +169,7 @@ describe('enum', () => {
   it('myEnums7 should have correct metadata', () => {
     const data = getPropertyMetadata(EnumTest.prototype, 'myEnums7');
 
-    expect(data?.type).to.equal(ValueTypeName.Enum);
+    expect(data?.type).to.equal(ValueTypeName.String);
     expect(data?.isArray).to.equal(true);
     expect(data?.isOptional).to.equal(true);
     expect(data?.initializer).to.deep.equal([MyEnum.b]);
