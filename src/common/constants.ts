@@ -1,11 +1,11 @@
 export enum MetaName {
-  Prop = 'EXTENDED_METADATA:PROP',
-  Method = 'EXTENDED_METADATA:METHOD',
+  Prop = 'tsemd:prop',
+  Method = 'tsemd:method',
 }
 
 export enum GetterName {
-  Props = '_EXTENDED_METADATA_PROPS',
-  Methods = '_EXTENDED_METADATA_METHODS',
+  Props = '_tsemd_props',
+  Methods = '_tsemd_methods',
 }
 
 export enum ValueTypeName {
