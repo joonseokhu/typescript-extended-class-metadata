@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import ts from 'typescript';
 import { MemberMetadata } from './member.metadata';
 import { serializeValue } from '../serializer';
@@ -11,6 +12,7 @@ export class PropertyMetadata extends MemberMetadata<ts.PropertyDeclaration> {
   constructor(node: ts.PropertyDeclaration, type: ts.Type) {
     super(node, type);
     this.valueType = new ValueTypeMetadata(this.node, this.type);
+    this.flag |= this.valueType.flag;
     this.parseInitializer();
   }
 
@@ -22,6 +24,7 @@ export class PropertyMetadata extends MemberMetadata<ts.PropertyDeclaration> {
     return {
       ...super.getProperties(),
       ...this.valueType.getProperties(),
+      flag: serializeValue.asNumber(this.flag),
       initializer: serializeValue.asIdentifier(this.initializer?.getText()),
     };
   }

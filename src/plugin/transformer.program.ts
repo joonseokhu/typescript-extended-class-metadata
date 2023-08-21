@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 import ts from 'typescript';
-import { ClassVisitor } from './transformer.class-visitor';
+import { ClassVisitor } from './visitors/transformer.class-visitor';
 
 export const transformerProgram = (program: ts.Program, config?: any): ts.TransformerFactory<any> => {
   return (context: ts.TransformationContext): ts.Transformer<any> => {

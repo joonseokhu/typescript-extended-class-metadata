@@ -1,13 +1,12 @@
 /* eslint-disable no-bitwise */
 import ts from 'typescript';
-import * as Output from '../../lib/types';
-import { Metadata } from './metadata.abstract';
+import { ValueTypeFlag, ValueTypeName } from '../../common/constants';
 import * as parse from '../parser';
 import { serializeValue } from '../serializer';
-import { ValueTypeName } from '../../common/constants';
+import { Metadata } from './metadata.abstract';
 
 export class ValueTypeMetadata extends Metadata {
-  private flag: Output.ValueTypeFlag = 0;
+  public flag: number = 0;
 
   private typeName: ValueTypeName = ValueTypeName.Unknown;
 
@@ -30,21 +29,21 @@ export class ValueTypeMetadata extends Metadata {
     const [isOptional, optionalType] = parse.parseOptionalType(this.type);
     if (!isOptional) return;
     this.type = optionalType;
-    this.flag |= Output.ValueTypeFlag.Optional;
+    this.flag |= ValueTypeFlag.Optional;
   }
 
   private parsePromise() {
     const [isPromise, promiseResolvedType] = parse.parsePromise(this.type);
     if (!isPromise) return;
     this.type = promiseResolvedType;
-    this.flag |= Output.ValueTypeFlag.Promise;
+    this.flag |= ValueTypeFlag.Promise;
   }
 
   private parseArray() {
     const [isArray, arrayItemType] = parse.parseArray(this.type);
     if (!isArray) return;
     this.type = arrayItemType;
-    this.flag |= Output.ValueTypeFlag.Array;
+    this.flag |= ValueTypeFlag.Array;
   }
 
   // private parseUnion() {
@@ -56,7 +55,7 @@ export class ValueTypeMetadata extends Metadata {
   private parseClass() {
     const [isClass, classType] = parse.parseClass(this.type);
     if (!isClass) return;
-    this.flag |= Output.ValueTypeFlag.Class;
+    this.flag |= ValueTypeFlag.Class;
     this.typeName = ValueTypeName.Object;
     this.className = classType.name?.getText() ?? 'Object';
   }
@@ -64,7 +63,7 @@ export class ValueTypeMetadata extends Metadata {
   private parseEnum() {
     const [isEnum, enumValue] = parse.parseEnum(this.type);
     if (!isEnum) return;
-    this.flag |= Output.ValueTypeFlag.Enum;
+    this.flag |= ValueTypeFlag.Enum;
     this.typeName = ValueTypeName.String;
     this.enumName = enumValue.name?.getText() ?? 'undefined';
   }

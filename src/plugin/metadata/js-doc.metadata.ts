@@ -1,15 +1,17 @@
+/* eslint-disable no-bitwise */
 import ts from 'typescript';
 import { Metadata } from './metadata.abstract';
 import { serializeValue } from '../serializer';
+import { MemberFlag } from '../../lib';
 
 export class JsDocMetadata extends Metadata {
   private jsDoc: ts.JSDoc | undefined;
 
   private comment: string = '';
 
-  private deprecated: boolean = false;
-
   private tags: { name: string, comment: string }[] = [];
+
+  public flag: number = 0;
 
   constructor(node: ts.Node, type: ts.Type) {
     super(node, type);
@@ -32,7 +34,9 @@ export class JsDocMetadata extends Metadata {
 
   private parseDeprecated() {
     if (!this.jsDoc) return;
-    this.deprecated = !!ts.getJSDocDeprecatedTag(this.jsDoc);
+    const deprecated = !!ts.getJSDocDeprecatedTag(this.jsDoc);
+    if (!deprecated) return;
+    this.flag |= MemberFlag.Deprecated;
   }
 
   private parseTags() {
@@ -54,7 +58,6 @@ export class JsDocMetadata extends Metadata {
   getProperties() {
     return {
       comment: serializeValue.asString(this.comment),
-      deprecated: serializeValue.asBoolean(this.deprecated),
       tags: serializeValue.asArray(this.tags.map((tag) => {
         return serializeValue.asRecord({
           name: serializeValue.asString(tag.name),

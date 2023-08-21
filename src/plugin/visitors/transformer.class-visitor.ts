@@ -1,8 +1,8 @@
 import ts from 'typescript';
-import { GetterName } from '../common/constants';
-import { CreateStaticGetter, MetadataDecorator } from './transformer';
+import { GetterName } from '../../common/constants';
+import { CreateStaticGetter, MetadataDecorator } from '../transformer';
 import { ClassElementVisitor } from './transformer.class-element-visitor';
-import { ClassTransformerMetadata } from './transformer.types';
+import { ClassTransformerMetadata } from '../transformer.types';
 
 export class ClassVisitor {
   public metadataDecorator: MetadataDecorator;
