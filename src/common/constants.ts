@@ -1,13 +1,13 @@
 export enum MetaName {
-  Prop = 'tsemd:p',
-  Method = 'tsemd:m',
-  ReturnType = 'tsemd:mrt',
-  ParamTypes = 'tsemd:mpt',
+  Prop = 'tsemd:prop',
+  Method = 'tsemd:method',
+  ReturnType = 'tsemd:returntype',
+  ParamTypes = 'tsemd:paramtypes',
 }
 
 export enum GetterName {
-  Props = '_tsemd_pl',
-  Methods = '_tsemd_ml',
+  Props = '_tsemd_props',
+  Methods = '_tsemd_methods',
 }
 
 export enum ValueTypeName {
