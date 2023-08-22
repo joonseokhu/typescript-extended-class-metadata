@@ -53,11 +53,11 @@ export class ValueTypeMetadata extends Metadata {
   // }
 
   private parseClass() {
-    const [isClass, classType] = parse.parseClass(this.type);
+    const [isClass, className] = parse.parseClass(this.type);
     if (!isClass) return;
     this.flag |= ValueTypeFlag.Class;
     this.typeName = ValueTypeName.Object;
-    this.className = classType.name?.getText() ?? 'Object';
+    this.className = className ?? 'Object';
   }
 
   private parseEnum() {

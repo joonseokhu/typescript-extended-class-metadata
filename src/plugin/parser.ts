@@ -1,6 +1,10 @@
 /* eslint-disable no-bitwise */
 import ts from 'typescript';
 
+export const hasFlag = (flag: number = 0, flags: number[] = []) => {
+  return flags.some((f) => (flag & f) === f);
+};
+
 export const hasTypeFlag = <T extends ts.Type>(
   flags: ts.TypeFlags[],
 ) => (
@@ -156,12 +160,14 @@ export const parseEnum = useTypeParser((type) => {
 });
 
 export const parseClass = useTypeParser((type: ts.Type) => {
-  const isClass = type.symbol?.flags === ts.SymbolFlags.Class;
-  if (!isClass) return false;
+  const declaration = type.symbol?.valueDeclaration;
 
-  // get class type
-  const classType = type.symbol?.declarations?.[0] as ts.ClassDeclaration;
-  if (classType === undefined) return false;
+  if (!declaration) return false;
 
-  return classType;
+  if (!hasFlag(type.symbol?.flags ?? 0, [
+    ts.SymbolFlags.Class,
+    ts.SymbolFlags.Interface,
+  ])) return false;
+
+  return type.symbol.escapedName.toString();
 });
