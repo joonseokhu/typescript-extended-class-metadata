@@ -20,7 +20,7 @@ export class MemberMetadata<
     this.jsDoc = new JsDocMetadata(this.node, this.type);
     this.flag |= this.jsDoc.flag;
     this.parseStatic();
-    this.parsePublic();
+    this.parseNonPublic();
   }
 
   private parseStatic() {
@@ -30,7 +30,7 @@ export class MemberMetadata<
     this.flag |= MemberFlag.Static;
   }
 
-  private parsePublic() {
+  private parseNonPublic() {
     const isPublic = !this.node.modifiers?.some((modifier) => {
       return [
         ts.SyntaxKind.PrivateKeyword,
@@ -38,8 +38,8 @@ export class MemberMetadata<
       ].includes(modifier.kind);
     });
 
-    if (!isPublic) return;
-    this.flag |= MemberFlag.Public;
+    if (isPublic) return;
+    this.flag |= MemberFlag.NonPublic;
   }
 
   getProperties() {

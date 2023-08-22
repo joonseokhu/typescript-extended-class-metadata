@@ -7,7 +7,7 @@ export interface ValueTypeFlags {
 }
 
 export interface MemberFlags {
-  isPublic: boolean;
+  isNotPublic: boolean;
   isDeprecated: boolean;
   isStatic: boolean;
 }

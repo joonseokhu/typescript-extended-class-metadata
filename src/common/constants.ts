@@ -32,7 +32,7 @@ export enum ValueTypeFlag {
 
 export enum MemberFlag {
   Unknown = 0,
-  Public = 1 << 10,
+  Deprecated = 1 << 10,
   Static = 1 << 11,
-  Deprecated = 1 << 12,
+  NonPublic = 1 << 12,
 }

@@ -23,7 +23,7 @@ export const parseValueTypeFlag = (flag: ValueTypeFlag): ValueTypeFlags => {
 
 export const parseMemberFlag = (flag: number): MemberFlags => {
   return {
-    isPublic: !!(flag & MemberFlag.Public),
+    isNotPublic: !!(flag & MemberFlag.NonPublic),
     isStatic: !!(flag & MemberFlag.Static),
     isDeprecated: !!(flag & MemberFlag.Deprecated),
   };
