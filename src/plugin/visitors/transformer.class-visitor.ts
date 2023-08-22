@@ -11,7 +11,11 @@ export class ClassVisitor {
 
   public createStaticGetter: CreateStaticGetter;
 
-  public metadata: ClassTransformerMetadata = { properties: [], methods: [] };
+  public metadata: ClassTransformerMetadata = {
+    properties: [],
+    methods: [],
+    decorators: [],
+  };
 
   constructor(
     public program: ts.Program,
@@ -41,7 +45,11 @@ export class ClassVisitor {
 
     return this.context.factory.updateClassDeclaration(
       node,
-      [...(ts.getModifiers(node) ?? []), ...(ts.getDecorators(node) ?? [])],
+      [
+        ...(ts.getModifiers(node) ?? []),
+        ...(ts.getDecorators(node) ?? []),
+        ...this.metadata.decorators,
+      ],
       node.name,
       node.typeParameters,
       node.heritageClauses,

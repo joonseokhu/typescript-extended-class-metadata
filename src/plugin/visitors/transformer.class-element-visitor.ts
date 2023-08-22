@@ -25,18 +25,12 @@ export class ClassElementVisitor {
       return new ValueTypeMetadata(parameter, parameterType).serialize();
     });
 
-    return this.context.factory.updateConstructorDeclaration(
-      node,
-      [
-        ...ts.getModifiers(node) ?? [],
-        this.metadataDecorator.create(
-          MetaName.ParamTypes,
-          serializeValue.asArray(paramTypes),
-        ),
-      ],
-      node.parameters,
-      node.body,
-    );
+    this.metadata.decorators.push(this.metadataDecorator.create(
+      MetaName.ParamTypes,
+      serializeValue.asArray(paramTypes),
+    ));
+
+    return node;
   }
 
   private getName(node: ts.ClassElement) {
