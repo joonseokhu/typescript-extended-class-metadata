@@ -148,15 +148,20 @@ export const parsePromise = useTypeParser((type) => {
 export const parseEnum = useTypeParser((type) => {
   if (!isEnumType(type)) return false;
 
-  // get enum type
+  if (hasFlag(type.symbol?.flags, [ts.SymbolFlags.EnumMember])) {
+    const enumMember = type.symbol?.declarations?.[0] as ts.EnumMember;
+    const enumType = enumMember.parent as ts.EnumDeclaration;
+
+    if (!enumType) return false;
+
+    return enumType.name.getText();
+  }
+
   const enumType = type.symbol?.declarations?.[0] as ts.EnumDeclaration;
 
   if (!enumType) return false;
 
-  const enumMembers = enumType.members
-    .filter((member): member is ts.EnumMember => ts.isEnumMember(member));
-
-  return enumType;
+  return enumType.name.getText();
 });
 
 export const parseClass = useTypeParser((type: ts.Type) => {

@@ -61,11 +61,11 @@ export class ValueTypeMetadata extends Metadata {
   }
 
   private parseEnum() {
-    const [isEnum, enumValue] = parse.parseEnum(this.type);
+    const [isEnum, enumName] = parse.parseEnum(this.type);
     if (!isEnum) return;
     this.flag |= ValueTypeFlag.Enum;
     this.typeName = ValueTypeName.String;
-    this.enumName = enumValue.name?.getText() ?? 'undefined';
+    this.enumName = enumName ?? 'undefined';
   }
 
   private parsePrimitive() {
