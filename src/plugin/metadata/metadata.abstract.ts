@@ -7,7 +7,7 @@ export abstract class Metadata<
 > {
   constructor(protected node: Node, protected type: Type) { }
 
-  abstract getProperties(): Record<string, ts.Expression>;
+  abstract getProperties(): Record<string, ts.Expression | undefined>;
 
   serialize(): ts.ObjectLiteralExpression {
     return serializeValue.asRecord(this.getProperties());

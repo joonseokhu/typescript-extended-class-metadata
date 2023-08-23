@@ -57,13 +57,13 @@ export class JsDocMetadata extends Metadata {
 
   getProperties() {
     return {
-      comment: serializeValue.asString(this.comment),
-      tags: serializeValue.asArray(this.tags.map((tag) => {
+      comment: this.comment ? serializeValue.asString(this.comment) : undefined,
+      tags: this.tags.length ? serializeValue.asArray(this.tags.map((tag) => {
         return serializeValue.asRecord({
           name: serializeValue.asString(tag.name),
           comment: serializeValue.asString(tag.comment),
         });
-      })),
+      })) : undefined,
     };
   }
 }

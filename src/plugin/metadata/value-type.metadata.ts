@@ -10,9 +10,9 @@ export class ValueTypeMetadata extends Metadata {
 
   private typeName: ValueTypeName = ValueTypeName.Unknown;
 
-  private className: string = 'undefined';
+  private className: string | undefined;
 
-  private enumName: string = 'undefined';
+  private enumName: string | undefined;
 
   constructor(node: ts.Node, type: ts.Type) {
     super(node, type);
@@ -65,7 +65,7 @@ export class ValueTypeMetadata extends Metadata {
     if (!isEnum) return;
     this.flag |= ValueTypeFlag.Enum;
     this.typeName = ValueTypeName.String;
-    this.enumName = enumName ?? 'undefined';
+    this.enumName = enumName;
   }
 
   private parsePrimitive() {
@@ -80,8 +80,12 @@ export class ValueTypeMetadata extends Metadata {
     return {
       type: serializeValue.asString(this.typeName),
       flag: serializeValue.asNumber(this.flag),
-      enum: serializeValue.asIdentifier(this.enumName),
-      class: serializeValue.asIdentifier(this.className),
+      enum: this.enumName
+        ? serializeValue.asIdentifier(this.enumName)
+        : undefined,
+      class: this.className
+        ? serializeValue.asIdentifier(this.className)
+        : undefined,
     };
   }
 }

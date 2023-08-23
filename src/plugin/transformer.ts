@@ -1,4 +1,5 @@
 import ts from 'typescript';
+import { serializeValue } from './serializer';
 
 export class MetadataDecorator {
   constructor(
@@ -9,7 +10,7 @@ export class MetadataDecorator {
 
   create(key: string, value: ts.Expression) {
     const callExp = this.context.factory.createCallExpression(
-      this.context.factory.createIdentifier('Reflect.metadata'),
+      this.context.factory.createIdentifier('__metadata'),
       undefined,
       [this.context.factory.createStringLiteral(key), value],
     );
@@ -19,11 +20,21 @@ export class MetadataDecorator {
 }
 
 export class CreateStaticGetter {
-  constructor(
-    public program: ts.Program,
+  private constructor(
     public context: ts.TransformationContext,
-    public sourceFile: ts.SourceFile,
+    public name: string,
+    public ownNames: string[],
+    public isInheriting: boolean,
   ) {}
+
+  static create(
+    context: ts.TransformationContext,
+    name: string,
+    ownNames: string[],
+    isInheriting: boolean,
+  ) {
+    return new CreateStaticGetter(context, name, ownNames, isInheriting).create();
+  }
 
   /**
    * `own` is a boolean parameter that indicates whether to get only own properties/methods or not.
@@ -70,75 +81,60 @@ export class CreateStaticGetter {
     );
   }
 
-  /**
-   * @returns `ownNames` if `own` is true,
-   * ```ts
-   * (isInheriting && !own) ? super.getPropertyNames().concat(ownNames) : ownNames
-   * ```
-   */
-  private createReturnValueExpression(
-    name: string,
-  ): ts.Expression {
-    const condition = this.context.factory.createBinaryExpression(
-      this.context.factory.createIdentifier('isInheriting'),
-      this.context.factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
-      this.context.factory.createPrefixUnaryExpression(
-        ts.SyntaxKind.ExclamationToken,
-        this.context.factory.createIdentifier('own'),
-      ),
-    );
-
-    const superExpression = this.context.factory.createCallExpression(
+  private createSuperCallExpression(): ts.CallExpression {
+    return this.context.factory.createCallExpression(
       this.context.factory.createPropertyAccessExpression(
         this.context.factory.createSuper(),
-        name,
+        this.name,
       ),
       undefined,
       [],
     );
+  }
 
-    const extendingExpression = this.context.factory.createCallExpression(
+  private createOwnNamesExpression() {
+    return serializeValue.asArray(this.ownNames.map(serializeValue.asString));
+  }
+
+  private createExtendingExpression() {
+    return this.context.factory.createCallExpression(
       this.context.factory.createPropertyAccessExpression(
-        superExpression,
+        this.createSuperCallExpression(),
         this.context.factory.createIdentifier('concat'),
       ),
       undefined,
-      [this.context.factory.createIdentifier('ownNames')],
-    );
-
-    return this.context.factory.createConditionalExpression(
-      condition,
-      this.context.factory.createToken(ts.SyntaxKind.QuestionToken),
-      extendingExpression,
-      this.context.factory.createToken(ts.SyntaxKind.ColonToken),
-      this.context.factory.createIdentifier('ownNames'),
+      [serializeValue.asIdentifier('l')],
     );
   }
 
-  create(
-    name: string,
-    ownNames: string[],
-    isInheriting: boolean,
-  ) {
-    const ownNamesExpression = this.context.factory.createArrayLiteralExpression(
-      ownNames.map((ownName) => this.context.factory.createStringLiteral(ownName)),
+  private createConditionalExpression() {
+    return this.context.factory.createConditionalExpression(
+      this.context.factory.createIdentifier('own'),
+      this.context.factory.createToken(ts.SyntaxKind.QuestionToken),
+      serializeValue.asIdentifier('l'),
+      this.context.factory.createToken(ts.SyntaxKind.ColonToken),
+      this.createExtendingExpression(),
     );
-    const isInheritingExpression = this.context.factory.createIdentifier(isInheriting ? 'true' : 'false');
+  }
 
+  private createResult(): ts.Expression {
+    if (!this.isInheriting) return serializeValue.asIdentifier('l');
+    if (!this.ownNames.length) return this.createSuperCallExpression();
+    return this.createConditionalExpression();
+  }
+
+  create() {
     return this.context.factory.createMethodDeclaration(
       [this.context.factory.createModifier(ts.SyntaxKind.StaticKeyword)],
       undefined,
-      name,
+      this.name,
       undefined,
       undefined,
       this.createParam(),
       undefined,
       this.context.factory.createBlock([
-        this.createConstantStatement('ownNames', ownNamesExpression),
-        this.createConstantStatement('isInheriting', isInheritingExpression),
-        this.context.factory.createReturnStatement(
-          this.createReturnValueExpression(name),
-        ),
+        this.createConstantStatement('l', this.createOwnNamesExpression()),
+        this.context.factory.createReturnStatement(this.createResult()),
       ], true),
     );
   }

@@ -24,7 +24,6 @@ export class ClassVisitor {
   ) {
     this.metadataDecorator = new MetadataDecorator(program, context, sourceFile);
     this.elementVisitor = new ClassElementVisitor(program, context, sourceFile, this.metadata);
-    this.createStaticGetter = new CreateStaticGetter(program, context, sourceFile);
   }
 
   visit(node: ts.Node): ts.Node {
@@ -55,12 +54,14 @@ export class ClassVisitor {
       node.heritageClauses,
       [
         ...node.members,
-        this.createStaticGetter.create(
+        CreateStaticGetter.create(
+          this.context,
           GetterName.Props,
           this.metadata.properties,
           isExtending,
         ),
-        this.createStaticGetter.create(
+        CreateStaticGetter.create(
+          this.context,
           GetterName.Methods,
           this.metadata.methods,
           isExtending,
