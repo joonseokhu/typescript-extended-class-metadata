@@ -7,7 +7,7 @@ import { ValueTypeMetadata } from './value-type.metadata';
 export class PropertyMetadata extends MemberMetadata<ts.PropertyDeclaration> {
   private valueType: ValueTypeMetadata;
 
-  private initializer: string | undefined;
+  private initializer: ts.Expression | undefined;
 
   constructor(node: ts.PropertyDeclaration, type: ts.Type) {
     super(node, type);
@@ -17,7 +17,7 @@ export class PropertyMetadata extends MemberMetadata<ts.PropertyDeclaration> {
   }
 
   private parseInitializer() {
-    this.initializer = this.node.initializer?.getText() || undefined;
+    this.initializer = this.node.initializer;
   }
 
   getProperties() {
@@ -25,9 +25,7 @@ export class PropertyMetadata extends MemberMetadata<ts.PropertyDeclaration> {
       ...super.getProperties(),
       ...this.valueType.getProperties(),
       flag: serializeValue.asNumber(this.flag),
-      initializer: this.initializer
-        ? serializeValue.asIdentifier(this.initializer)
-        : undefined,
+      initializer: this.initializer,
     };
   }
 }
