@@ -22,7 +22,7 @@ export interface ValueTypeMetadata extends ValueTypeFlags {
 export interface ClassElementMetadata extends MemberFlags {
   flag: number;
   comment: string;
-  tags: { name: string, comment: string }[];
+  tags: [string, string][];
 }
 
 export interface ClassMethodMetadata extends ClassElementMetadata {}

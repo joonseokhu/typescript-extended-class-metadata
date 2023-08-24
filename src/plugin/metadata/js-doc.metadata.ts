@@ -9,7 +9,7 @@ export class JsDocMetadata extends Metadata {
 
   private comment: string = '';
 
-  private tags: { name: string, comment: string }[] = [];
+  private tags: string[][] = [];
 
   public flag: number = 0;
 
@@ -41,8 +41,7 @@ export class JsDocMetadata extends Metadata {
 
   private parseTags() {
     if (!this.jsDoc) return;
-    this.tags = ts
-      .getAllJSDocTags(this.jsDoc, (tag): tag is ts.JSDocTag => !!tag)
+    this.tags = (this.jsDoc.tags ?? [])
       .map((tag) => {
         const content = (() => {
           if (!tag.comment) return '';
@@ -51,18 +50,17 @@ export class JsDocMetadata extends Metadata {
             .map((comment) => String(comment.text).trim())
             .join('\n');
         })();
-        return { name: String(tag.tagName.text), comment: content };
+        return [String(tag.tagName.text), content];
       });
   }
 
   getProperties() {
     return {
       comment: this.comment ? serializeValue.asString(this.comment) : undefined,
-      tags: this.tags.length ? serializeValue.asArray(this.tags.map((tag) => {
-        return serializeValue.asRecord({
-          name: serializeValue.asString(tag.name),
-          comment: serializeValue.asString(tag.comment),
-        });
+      tags: this.tags.length ? serializeValue.asArray(this.tags.map((fields) => {
+        return serializeValue.asArray(fields.map((field) => {
+          return serializeValue.asString(field);
+        }));
       })) : undefined,
     };
   }
