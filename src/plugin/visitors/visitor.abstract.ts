@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import ts from 'typescript';
 import { MetadataDecorator } from '../transformer';
 
@@ -6,23 +7,38 @@ export abstract class Visitor<
 > {
   protected metadataDecorator: MetadataDecorator;
 
-  protected decorators: ts.Decorator[] = [];
+  // protected decorators: ts.Decorator[] = [];
 
-  protected type: ts.Type;
+  protected typeChecker: ts.TypeChecker;
 
   constructor(
-    protected node: Node,
     protected program: ts.Program,
     protected context: ts.TransformationContext,
     protected sourceFile: ts.SourceFile,
   ) {
-    this.type = this.program.getTypeChecker().getTypeAtLocation(this.node);
+    this.typeChecker = this.program.getTypeChecker();
     this.metadataDecorator = new MetadataDecorator(program, context, sourceFile);
   }
 
-  protected addDecorator(name: string, value: ts.Expression) {
-    this.decorators.push(this.metadataDecorator.create(name, value));
+  protected getType(node: Node) {
+    return this.typeChecker.getTypeAtLocation(node);
   }
 
-  abstract visit(): Node;
+  useDecorators(): [
+    ts.Decorator[],
+    (name: string, value: ts.Expression) => void,
+  ] {
+    const decorators: ts.Decorator[] = [];
+
+    const pushDecorator = (name: string, value: ts.Expression) => {
+      decorators.push(this.metadataDecorator.create(name, value));
+    };
+
+    return [
+      decorators,
+      pushDecorator,
+    ];
+  }
+
+  abstract visit(node: Node): Node;
 }

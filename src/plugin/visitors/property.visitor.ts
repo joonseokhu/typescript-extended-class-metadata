@@ -1,32 +1,40 @@
+/* eslint-disable no-bitwise */
 import ts from 'typescript';
 import { MetaName } from '../../lib';
 import { PropertyMetadata } from '../metadata';
 import { Visitor } from './visitor.abstract';
 
 export class PropertyVisitor extends Visitor<ts.PropertyDeclaration> {
-  private update() {
+  private update(node: ts.PropertyDeclaration, decorators: ts.Decorator[]) {
     return this.context.factory.updatePropertyDeclaration(
-      this.node,
+      node,
       [
-        ...ts.getModifiers(this.node) ?? [],
-        ...ts.getDecorators(this.node) ?? [],
-        ...this.decorators,
+        ...ts.getModifiers(node) ?? [],
+        ...ts.getDecorators(node) ?? [],
+        ...decorators,
       ],
-      this.node.name,
-      this.node.questionToken,
-      this.node.type,
-      this.node.initializer,
+      node.name,
+      node.questionToken,
+      node.type,
+      node.initializer,
     );
   }
 
-  private parsePropertyMetadata() {
-    const propertyMetadata = new PropertyMetadata(this.node, this.type);
+  private parsePropertyMetadata(node: ts.PropertyDeclaration) {
+    const type = this.getType(node);
+    const propertyMetadata = new PropertyMetadata(
+      node,
+      type,
+      this.program,
+      this.context,
+    );
 
-    this.addDecorator(MetaName.Prop, propertyMetadata.serialize());
+    return propertyMetadata.serialize();
   }
 
-  visit(): ts.PropertyDeclaration {
-    this.parsePropertyMetadata();
-    return this.update();
+  visit(node: ts.PropertyDeclaration): ts.PropertyDeclaration {
+    const [decorators, addDecorator] = this.useDecorators();
+    addDecorator(MetaName.Prop, this.parsePropertyMetadata(node));
+    return this.update(node, decorators);
   }
 }

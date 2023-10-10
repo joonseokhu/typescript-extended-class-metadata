@@ -5,51 +5,71 @@ import { serializeValue } from '../serializer';
 import { Visitor } from './visitor.abstract';
 
 export class MethodVisitor extends Visitor<ts.MethodDeclaration> {
-  private update() {
+  private update(node: ts.MethodDeclaration, decorators: ts.Decorator[]) {
     return this.context.factory.updateMethodDeclaration(
-      this.node,
+      node,
       [
-        ...ts.getModifiers(this.node) ?? [],
-        ...ts.getDecorators(this.node) ?? [],
-        ...this.decorators,
+        ...ts.getModifiers(node) ?? [],
+        ...ts.getDecorators(node) ?? [],
+        ...decorators,
       ],
-      this.node.asteriskToken,
-      this.node.name,
-      this.node.questionToken,
-      this.node.typeParameters,
-      this.node.parameters,
-      this.node.type,
-      this.node.body,
+      node.asteriskToken,
+      node.name,
+      node.questionToken,
+      node.typeParameters,
+      node.parameters,
+      node.type,
+      node.body,
     );
   }
 
-  private parseMethodMetadata() {
-    const methodMetadata = new MethodMetadata(this.node, this.type);
+  private parseMethodMetadata(node: ts.MethodDeclaration) {
+    const methodMetadata = new MethodMetadata(
+      node,
+      this.getType(node),
+      this.program,
+      this.context,
+    );
 
-    this.addDecorator(MetaName.Method, methodMetadata.serialize());
+    // MetaName.Method
+    return methodMetadata.serialize();
   }
 
-  private parseParamTypes() {
-    const paramTypes = this.node.parameters.map((parameter) => {
+  private parseParamTypes(node: ts.MethodDeclaration) {
+    const paramTypes = node.parameters.map((parameter) => {
       const parameterType = this.program.getTypeChecker().getTypeAtLocation(parameter);
-      return new ValueTypeMetadata(parameter, parameterType).serialize();
+      return new ValueTypeMetadata(
+        parameter,
+        parameterType,
+        this.program,
+        this.context,
+      ).serialize();
     });
 
-    this.addDecorator(MetaName.ParamTypes, serializeValue.asArray(paramTypes));
+    // MetaName.ParamTypes
+    return serializeValue.asArray(paramTypes);
   }
 
-  private parseReturnType() {
-    const returnType = this.type.getCallSignatures()[0].getReturnType();
-    const metadata = new ValueTypeMetadata(this.node, returnType);
+  private parseReturnType(node: ts.MethodDeclaration) {
+    const returnType = this.getType(node).getCallSignatures()[0].getReturnType();
+    const metadata = new ValueTypeMetadata(
+      node,
+      returnType,
+      this.program,
+      this.context,
+    );
 
-    this.addDecorator(MetaName.ReturnType, metadata.serialize());
+    // MetaName.ReturnType
+    return metadata.serialize();
   }
 
-  visit(): ts.MethodDeclaration {
-    this.parseMethodMetadata();
-    this.parseParamTypes();
-    this.parseReturnType();
+  visit(node: ts.MethodDeclaration): ts.MethodDeclaration {
+    const [decorators, addDecorator] = this.useDecorators();
 
-    return this.update();
+    addDecorator(MetaName.Method, this.parseMethodMetadata(node));
+    addDecorator(MetaName.ParamTypes, this.parseParamTypes(node));
+    addDecorator(MetaName.ReturnType, this.parseReturnType(node));
+
+    return this.update(node, decorators);
   }
 }

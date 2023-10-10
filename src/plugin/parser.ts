@@ -28,12 +28,12 @@ export const getTypeArgument = (
   return args.length === 1 ? args[0] : undefined;
 };
 
-export type TypeParser<T = ts.Type> = (type: ts.Type) => [true, T] | [false, undefined];
+export type TypeParser<T = ts.Type> = (type: ts.Type, node: ts.Node) => [true, T] | [false, undefined];
 
 export const useTypeParser = <T = ts.Type>(
-  parser: (inputType: ts.Type) => T | false,
-): TypeParser<T> => (type: ts.Type): [true, T] | [false, undefined] => {
-    const parsed = parser(type);
+  parser: (inputType: ts.Type, inputNode: ts.Node) => T | false,
+): TypeParser<T> => (type: ts.Type, node: ts.Node): [true, T] | [false, undefined] => {
+    const parsed = parser(type, node);
     return parsed
       ? [true, parsed]
       : [false, undefined];
@@ -87,8 +87,8 @@ export const parseUnion = useTypeParser((type) => (isUnionType(type, true)
   ? (type as ts.UnionType).types
   : false));
 
-export const parseOptionalType = useTypeParser((type) => {
-  const [isUnion, unionTypes] = parseUnion(type);
+export const parseOptionalType = useTypeParser((type, node) => {
+  const [isUnion, unionTypes] = parseUnion(type, node);
   if (!isUnion) return false;
   if (!unionTypes.some((t) => isUndefinedType(t))) return false;
   const restTypes = unionTypes.filter((t) => !isUndefinedType(t));
@@ -133,7 +133,7 @@ export const parseOptionalType = useTypeParser((type) => {
   return { ...type, types: restTypes };
 });
 
-export const parseArray = useTypeParser((type: ts.Type) => {
+export const parseArray = useTypeParser((type) => {
   if (!hasTypeSymbol('Array')(type)) return false;
   return getTypeArgument(type) ?? type;
 });
@@ -164,7 +164,7 @@ export const parseEnum = useTypeParser((type) => {
   return enumType.name.getText();
 });
 
-export const parseClass = useTypeParser((type: ts.Type) => {
+export const parseClass = useTypeParser((type, node) => {
   const declaration = type.symbol?.valueDeclaration;
 
   if (!declaration) return false;
@@ -173,6 +173,21 @@ export const parseClass = useTypeParser((type: ts.Type) => {
     ts.SymbolFlags.Class,
     ts.SymbolFlags.Interface,
   ])) return false;
+
+  // if (type.symbol.escapedName.toString() === 'ISub') {
+  //   const dec = type.symbol.valueDeclaration;
+  //   if (dec) {
+  //     // console.log('\\^o^/', ts.isExpression((dec as any).name!));
+  //     // console.log('\\^o^/', (dec as any).name);
+  //     console.log(Object.keys(dec));
+  //     // @ts-ignore
+  //     console.dir(dec, { depth: 1 });
+  //   }
+  // }
+
+  // @ts-ignore
+  // return type.symbol as any;
+  // return (type.symbol.valueDeclaration as any).name;
 
   return type.symbol.escapedName.toString();
 });

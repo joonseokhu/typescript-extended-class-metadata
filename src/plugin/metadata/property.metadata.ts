@@ -9,9 +9,20 @@ export class PropertyMetadata extends MemberMetadata<ts.PropertyDeclaration> {
 
   private initializer: ts.Expression | undefined;
 
-  constructor(node: ts.PropertyDeclaration, type: ts.Type) {
-    super(node, type);
-    this.valueType = new ValueTypeMetadata(this.node, this.type);
+  constructor(
+    node: ts.PropertyDeclaration,
+    type: ts.Type,
+    program: ts.Program,
+    context: ts.TransformationContext,
+    // sourceFile: ts.SourceFile,
+  ) {
+    super(node, type, program, context);
+    this.valueType = new ValueTypeMetadata(
+      this.node,
+      this.type,
+      this.program,
+      this.context,
+    );
     this.flag |= this.valueType.flag;
     this.parseInitializer();
   }

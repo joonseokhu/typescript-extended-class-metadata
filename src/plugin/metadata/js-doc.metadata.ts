@@ -13,8 +13,13 @@ export class JsDocMetadata extends Metadata {
 
   public flag: number = 0;
 
-  constructor(node: ts.Node, type: ts.Type) {
-    super(node, type);
+  constructor(
+    node: ts.Node,
+    type: ts.Type,
+    program: ts.Program,
+    context: ts.TransformationContext,
+  ) {
+    super(node, type, program, context);
     this.getJsDoc();
     this.parseComment();
     this.parseDeprecated();

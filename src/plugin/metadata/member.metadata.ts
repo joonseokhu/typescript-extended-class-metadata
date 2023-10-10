@@ -15,9 +15,11 @@ export class MemberMetadata<
   constructor(
     node: Node,
     type: ts.Type,
+    program: ts.Program,
+    context: ts.TransformationContext,
   ) {
-    super(node, type);
-    this.jsDoc = new JsDocMetadata(this.node, this.type);
+    super(node, type, program, context);
+    this.jsDoc = new JsDocMetadata(this.node, this.type, this.program, this.context);
     this.flag |= this.jsDoc.flag;
     this.parseStatic();
     this.parseNonPublic();
