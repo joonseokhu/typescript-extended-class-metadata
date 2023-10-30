@@ -94,7 +94,8 @@ export class ValueTypeMetadata extends Metadata {
     return str.replace(/\("([^"]+)"\)/, (match, p1) => {
       const relativePath = getRelativePath(p1, sourceFileName, cwd);
       return `("${relativePath}")`;
-    }).replace(/^import/, 'require');
+    }).replace(/^import/, 'require')
+      .replace(/<[A-Za-z0-9]+>/, '');
   }
 
   private parseClass() {

@@ -1,43 +1,91 @@
 import 'reflect-metadata';
 
-export class Sub {
+export class Foo {
   value: string;
 }
 
-const sub1 = new Sub();
-sub1.value = 'sub1-value';
+export class Bar<T = number> {
+  value: T;
+}
 
-const sub2 = new Sub();
-sub2.value = 'sub2-value';
+const foo1 = new Foo();
+foo1.value = 'sub1-value';
 
-export { sub1, sub2 };
+const foo2 = new Foo();
+foo2.value = 'sub2-value';
+
+const bar1 = new Bar();
+bar1.value = 1;
+
+const bar2 = new Bar<number>();
+bar2.value = 2;
+
+export {
+  foo1, foo2, bar1, bar2,
+};
 
 export class ClassTest {
-  sub1: Sub;
+  foo1: Foo;
 
-  sub2: Sub = sub1;
+  foo2: Foo = foo1;
 
-  sub3: Sub = sub2;
+  foo3: Foo = foo2;
 
-  sub4?: Sub;
+  foo4: Foo = new Foo();
 
-  sub5?: Sub = undefined;
+  foo5?: Foo;
 
-  sub6?: Sub = sub1;
+  foo6?: Foo = undefined;
 
-  sub7?: Sub = sub2;
+  foo7?: Foo = foo1;
 
-  subs1: Sub[];
+  foo8?: Foo = foo2;
 
-  subs2: Sub[] = [];
+  foos1: Foo[];
 
-  subs3: Sub[] = [sub1];
+  foos2: Foo[] = [];
 
-  subs4?: Sub[];
+  foos3: Foo[] = [foo1];
 
-  subs5?: Sub[] = undefined;
+  foos4: Foo[] = [new Foo()];
 
-  subs6?: Sub[] = [];
+  foos5?: Foo[];
 
-  subs7?: Sub[] = [sub2];
+  foos6?: Foo[] = undefined;
+
+  foos7?: Foo[] = [];
+
+  foos8?: Foo[] = [foo2];
+
+  bar1: Bar;
+
+  bar2: Bar = bar1;
+
+  bar3: Bar = bar2;
+
+  bar4: Bar = new Bar();
+
+  bar5?: Bar;
+
+  bar6?: Bar = undefined;
+
+  bar7?: Bar = bar1;
+
+  bar8?: Bar = bar2;
+
+  bars1: Bar[];
+
+  bars2: Bar[] = [];
+
+  bars3: Bar[] = [bar1];
+
+  bars4: Bar[] = [new Bar()];
+
+  bars5?: Bar[];
+
+  bars6?: Bar[] = undefined;
+
+  bars7?: Bar[] = [];
+
+  bars8?: Bar[] = [bar2];
 }
