@@ -11,8 +11,7 @@ export const getRelativePath = (
   }
 
   if (!target.startsWith(projectRoot)) {
-    // eslint-disable-next-line no-param-reassign
-    target = path.join(projectRoot, target);
+    return target;
   }
 
   const relative = path
