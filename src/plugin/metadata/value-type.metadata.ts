@@ -14,7 +14,6 @@ export class ValueTypeMetadata extends Metadata {
   private typeName: ValueTypeName = ValueTypeName.Unknown;
 
   private className: string | undefined;
-  // private className: ts.Expression | undefined;
 
   private enumName: string | undefined;
 
@@ -23,7 +22,6 @@ export class ValueTypeMetadata extends Metadata {
     type: ts.Type,
     program: ts.Program,
     context: ts.TransformationContext,
-    // sourceFile: ts.SourceFile,
   ) {
     super(node, type, program, context);
     this.typeChecker = this.program.getTypeChecker();
@@ -77,17 +75,6 @@ export class ValueTypeMetadata extends Metadata {
     );
     const sourceFileName = this.node.getSourceFile().fileName;
     const cwd = process.cwd();
-
-    const name1 = this.node.getFirstToken()?.getText();
-    // // console.log(this.node.getFirstToken()?.getText());
-    // if (name1 === 'myEnum1') {
-    //   console.log({
-    //     name,
-    //     str,
-    //     sourceFileName,
-    //     cwd,
-    //   });
-    // }
 
     if (!str.startsWith('import("')) return name;
 

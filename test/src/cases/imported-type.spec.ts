@@ -9,8 +9,10 @@ describe('imported type', () => {
       'iBool',
       'iNum',
       'iStr',
-      'iEnum',
-      'iSub',
+      'iEnumA',
+      'iEnumB',
+      'iSubA',
+      'iSubB',
     ]);
   });
 
