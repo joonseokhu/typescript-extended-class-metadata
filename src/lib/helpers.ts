@@ -31,25 +31,25 @@ export const parseMemberFlag = (flag: number): MemberFlags => {
 
 /**
  * get property names of class
- * @param target - target class
+ * @param TargetClass - target class
  * @param own - whether to get own property names
  * (default: false, get all property names including inherited property names)
  * @returns - property names of class
  */
-export const getPropertyNames = (target: object, own = false): string[] => {
-  const ret = (target as any)[GetterName.Props]?.(own);
+export const getPropertyNames = (TargetClass: Function, own = false): string[] => {
+  const ret = (TargetClass as any)[GetterName.Props]?.(own);
   return Array.from(new Set(ret));
 };
 
 /**
  * get method names of class
- * @param target - target class
+ * @param TargetClass - target class
  * @param own - whether to get own method names
  * (default: false, get all method names including inherited method names)
  * @returns - method names of class
  */
-export const getMethodNames = (target: object, own = false): string[] => {
-  const ret = (target as any)[GetterName.Methods]?.(own);
+export const getMethodNames = (TargetClass: Function, own = false): string[] => {
+  const ret = (TargetClass as any)[GetterName.Methods]?.(own);
   return Array.from(new Set(ret));
 };
 

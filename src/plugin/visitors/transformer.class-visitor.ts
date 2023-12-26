@@ -70,23 +70,27 @@ export class ClassVisitor {
   }
 
   createMetadataGetter(node: ts.ClassDeclaration) {
-    const isExtending = this.isExtending(node);
-
-    const metadata: Record<string, ts.Expression> = {};
+    const metadataValues: Record<string, ts.Expression> = {};
     Object.entries(this.metadata.metadata).forEach(([key, value]) => {
-      metadata[key] = serializeValue.asRecord(value);
+      metadataValues[key] = serializeValue.asRecord(value);
     });
+    const metadata = serializeValue.asRecord(metadataValues, true);
 
-    const superMetadata = this.isExtending(node)
-      ? this.context.factory.createCallExpression(
-        this.context.factory.createPropertyAccessExpression(
-          this.context.factory.createSuper(),
-          GetterName.Metadata,
+    const ret = this.isExtending(node)
+      ? this.context.factory.createObjectLiteralExpression([
+        this.context.factory.createSpreadAssignment(
+          this.context.factory.createCallExpression(
+            this.context.factory.createPropertyAccessExpression(
+              this.context.factory.createSuper(),
+              GetterName.Metadata,
+            ),
+            undefined,
+            [],
+          ),
         ),
-        undefined,
-        [],
-      )
-      : this.context.factory.createObjectLiteralExpression();
+        this.context.factory.createSpreadAssignment(metadata),
+      ], true)
+      : metadata;
 
     return this.context.factory.createMethodDeclaration(
       [this.context.factory.createModifier(ts.SyntaxKind.StaticKeyword)],
@@ -97,20 +101,8 @@ export class ClassVisitor {
       [],
       undefined,
       this.context.factory.createBlock([
-        this.context.factory.createReturnStatement(
-          this.context.factory.createCallExpression(
-            this.context.factory.createPropertyAccessExpression(
-              this.context.factory.createIdentifier('Object'),
-              this.context.factory.createIdentifier('assign'),
-            ),
-            undefined,
-            [
-              superMetadata,
-              serializeValue.asRecord(metadata, true),
-            ],
-          ),
-        ),
-      ]),
+        this.context.factory.createReturnStatement(ret),
+      ], true),
     );
   }
 }
