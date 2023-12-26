@@ -30,6 +30,40 @@ export const parseMemberFlag = (flag: number): MemberFlags => {
 };
 
 /**
+ * get property names of class
+ * @param target - target class
+ * @param own - whether to get own property names
+ * (default: false, get all property names including inherited property names)
+ * @returns - property names of class
+ */
+export const getPropertyNames = (target: object, own = false): string[] => {
+  const ret = (target as any)[GetterName.Props]?.(own);
+  return Array.from(new Set(ret));
+};
+
+/**
+ * get method names of class
+ * @param target - target class
+ * @param own - whether to get own method names
+ * (default: false, get all method names including inherited method names)
+ * @returns - method names of class
+ */
+export const getMethodNames = (target: object, own = false): string[] => {
+  const ret = (target as any)[GetterName.Methods]?.(own);
+  return Array.from(new Set(ret));
+};
+
+export const getMetadata = (metaKey: MetaName, target: object, propertyKey: string | symbol) => {
+  // return (target as any)[GetterName.Metadata]?.()?.[propertyKey]?.[metaKey];
+  let res: any = target.constructor;
+  res = res[GetterName.Metadata];
+  res = res?.();
+  res = res?.[propertyKey];
+  res = res?.[metaKey];
+  return res;
+};
+
+/**
  * get metadata of property
  * @param target - target class
  * @param propertyKey - property key
@@ -39,7 +73,7 @@ export const getPropertyMetadata = (
   target: object,
   propertyKey: string | symbol,
 ): ClassPropertyMetadata | undefined => {
-  const metadata = Reflect.getMetadata(MetaName.Prop, target, propertyKey);
+  const metadata = getMetadata(MetaName.Prop, target, propertyKey);
   if (!metadata) return undefined;
   return {
     ...metadata,
@@ -58,7 +92,8 @@ export const getMethodMetadata = (
   target: object,
   propertyKey: string | symbol,
 ): ClassMethodMetadata | undefined => {
-  const metadata = Reflect.getMetadata(MetaName.Method, target, propertyKey);
+  (target as any)[GetterName.Metadata]?.();
+  const metadata = getMetadata(MetaName.Method, target, propertyKey);
   if (!metadata) return undefined;
   return {
     ...metadata,
@@ -70,7 +105,8 @@ export const getMethodParamTypesMetadata = (
   target: object,
   propertyKey: string | symbol,
 ): ClassMethodParamTypesMetadata[] | undefined => {
-  const metadata = Reflect.getMetadata(MetaName.ParamTypes, target, propertyKey);
+  (target as any)[GetterName.Metadata]?.();
+  const metadata = getMetadata(MetaName.ParamTypes, target, propertyKey);
   if (!metadata) return undefined;
   return metadata.map((item: any) => ({
     ...item,
@@ -82,32 +118,11 @@ export const getMethodReturnTypeMetadata = (
   target: object,
   propertyKey: string | symbol,
 ): ClassMethodReturnTypeMetadata | undefined => {
-  const metadata = Reflect.getMetadata(MetaName.ReturnType, target, propertyKey);
+  (target as any)[GetterName.Metadata]?.();
+  const metadata = getMetadata(MetaName.ReturnType, target, propertyKey);
   if (!metadata) return undefined;
   return {
     ...metadata,
     ...parseValueTypeFlag(metadata?.flag ?? 0),
   };
-};
-
-/**
- * get property names of class
- * @param target - target class
- * @param own - whether to get own property names
- * (default: false, get all property names including inherited property names)
- * @returns - property names of class
- */
-export const getPropertyNames = (target: object, own = false): string[] => {
-  return (target as any)[GetterName.Props]?.(own);
-};
-
-/**
- * get method names of class
- * @param target - target class
- * @param own - whether to get own method names
- * (default: false, get all method names including inherited method names)
- * @returns - method names of class
- */
-export const getMethodNames = (target: object, own = false): string[] => {
-  return (target as any)[GetterName.Methods]?.(own);
 };

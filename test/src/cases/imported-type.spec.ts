@@ -11,8 +11,10 @@ describe('imported type', () => {
       'iStr',
       'iEnumA',
       'iEnumB',
+      'iEnumC',
       'iSubA',
       'iSubB',
+      'iSubC',
     ]);
   });
 

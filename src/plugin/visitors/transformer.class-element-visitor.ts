@@ -49,15 +49,17 @@ export class ClassElementVisitor {
   }
 
   private visitProperty(node: ts.PropertyDeclaration) {
-    this.metadata.properties.push(this.getName(node));
-    // return new PropertyVisitor(this.program, this.context, this.sourceFile).visit(node);
-    return this.propertyVisitor.visit(node);
+    const memberName = this.getName(node);
+    this.metadata.properties.push(memberName);
+    this.metadata.metadata[memberName] = this.propertyVisitor.parse(node);
+    return node;
   }
 
   private visitMethod(node: ts.MethodDeclaration) {
-    this.metadata.methods.push(this.getName(node));
-    // return new MethodVisitor(this.program, this.context, this.sourceFile).visit(node);
-    return this.methodVisitor.visit(node);
+    const memberName = this.getName(node);
+    this.metadata.methods.push(memberName);
+    this.metadata.metadata[memberName] = this.methodVisitor.parse(node);
+    return node;
   }
 
   visit(node: ts.Node): ts.Node {

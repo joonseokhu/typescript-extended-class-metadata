@@ -5,7 +5,7 @@ import { PropertyMetadata } from '../metadata';
 import { Visitor } from './visitor.abstract';
 
 export class PropertyVisitor extends Visitor<ts.PropertyDeclaration> {
-  private update(node: ts.PropertyDeclaration, decorators: ts.Decorator[]) {
+  update(node: ts.PropertyDeclaration, decorators: ts.Decorator[]) {
     return this.context.factory.updatePropertyDeclaration(
       node,
       [
@@ -32,9 +32,9 @@ export class PropertyVisitor extends Visitor<ts.PropertyDeclaration> {
     return propertyMetadata.serialize();
   }
 
-  visit(node: ts.PropertyDeclaration): ts.PropertyDeclaration {
-    const [decorators, addDecorator] = this.useDecorators();
-    addDecorator(MetaName.Prop, this.parsePropertyMetadata(node));
-    return this.update(node, decorators);
+  parse(node: ts.PropertyDeclaration): Partial<Record<MetaName, ts.Expression>> {
+    return {
+      [MetaName.Prop]: this.parsePropertyMetadata(node),
+    };
   }
 }

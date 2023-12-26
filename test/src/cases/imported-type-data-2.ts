@@ -1,2 +1,2 @@
 export class ISubC {}
-export class IEnumC {}
+export enum IEnumC {}

@@ -7,8 +7,6 @@ export abstract class Visitor<
 > {
   protected metadataDecorator: MetadataDecorator;
 
-  // protected decorators: ts.Decorator[] = [];
-
   protected typeChecker: ts.TypeChecker;
 
   constructor(
@@ -23,22 +21,4 @@ export abstract class Visitor<
   protected getType(node: Node) {
     return this.typeChecker.getTypeAtLocation(node);
   }
-
-  useDecorators(): [
-    ts.Decorator[],
-    (name: string, value: ts.Expression) => void,
-  ] {
-    const decorators: ts.Decorator[] = [];
-
-    const pushDecorator = (name: string, value: ts.Expression) => {
-      decorators.push(this.metadataDecorator.create(name, value));
-    };
-
-    return [
-      decorators,
-      pushDecorator,
-    ];
-  }
-
-  abstract visit(node: Node): Node;
 }

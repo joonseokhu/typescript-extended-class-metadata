@@ -8,6 +8,7 @@ export enum MetaName {
 export enum GetterName {
   Props = '_tsemd_props',
   Methods = '_tsemd_methods',
+  Metadata = '_tsemd_metadata',
 }
 
 export enum ValueTypeName {

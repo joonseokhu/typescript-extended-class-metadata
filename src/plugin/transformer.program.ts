@@ -8,6 +8,7 @@ export const transformerProgram = (program: ts.Program, config?: any): ts.Transf
       const visitor = (node: ts.Node): ts.Node => {
         if (!node) return ts.visitEachChild(node, visitor, context);
         if (!node.parent) return ts.visitEachChild(node, visitor, context);
+        if (!ts.isClassDeclaration(node)) return node;
 
         const classVisitor = new ClassVisitor(
           program,

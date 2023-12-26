@@ -5,7 +5,7 @@ import { serializeValue } from '../serializer';
 import { Visitor } from './visitor.abstract';
 
 export class MethodVisitor extends Visitor<ts.MethodDeclaration> {
-  private update(node: ts.MethodDeclaration, decorators: ts.Decorator[]) {
+  update(node: ts.MethodDeclaration, decorators: ts.Decorator[]) {
     return this.context.factory.updateMethodDeclaration(
       node,
       [
@@ -59,17 +59,14 @@ export class MethodVisitor extends Visitor<ts.MethodDeclaration> {
       this.context,
     );
 
-    // MetaName.ReturnType
     return metadata.serialize();
   }
 
-  visit(node: ts.MethodDeclaration): ts.MethodDeclaration {
-    const [decorators, addDecorator] = this.useDecorators();
-
-    addDecorator(MetaName.Method, this.parseMethodMetadata(node));
-    addDecorator(MetaName.ParamTypes, this.parseParamTypes(node));
-    addDecorator(MetaName.ReturnType, this.parseReturnType(node));
-
-    return this.update(node, decorators);
+  parse(node: ts.MethodDeclaration): Partial<Record<MetaName, ts.Expression>> {
+    return {
+      [MetaName.Method]: this.parseMethodMetadata(node),
+      [MetaName.ParamTypes]: this.parseParamTypes(node),
+      [MetaName.ReturnType]: this.parseReturnType(node),
+    };
   }
 }
